@@ -27,7 +27,7 @@ app.post("/players", async (req, res) => {
 });
 
 app.patch("/players/:id", async (req, res) => {
-  const playerId = number(req.params.id);
+  const playerId = Number(req.params.id);
   const data = req.body;
 
   try {
@@ -41,7 +41,7 @@ app.patch("/players/:id", async (req, res) => {
   }
 });
 
-app.delete("/player/:id", async (req, res) => {
+app.delete("/players/:id", async (req, res) => {
   const playerId = Number(req.params.id);
 
   try {
@@ -55,5 +55,5 @@ app.delete("/player/:id", async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Sever running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
