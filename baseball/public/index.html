@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>Baseball Player 관리</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; }
+    h1 { text-align: center; }
+    form { margin-bottom: 20px; }
+    label { display: block; margin-top: 10px; }
+    input[type="text"] { width: 100%; padding: 8px; box-sizing: border-box; }
+    button { margin-top: 10px; padding: 10px 20px; }
+    ul { list-style: none; padding-left: 0; }
+    li { border-bottom: 1px solid #ddd; padding: 10px 0; }
+  </style>
+</head>
+<body>
+  <h1>선수 관리</h1>
+
+  <form id="playerForm">
+    <label>이름: <input type="text" id="name" required /></label>
+    <label>포지션: <input type="text" id="position" required /></label>
+    <label>팀: <input type="text" id="team" required /></label>
+    <button type="submit">선수 등록</button>
+  </form>
+
+  <h2>선수 목록</h2>
+  <ul id="playerList"></ul>
+
+  <script>
+    async function fetchPlayers() {
+      const res = await fetch('/players');
+      const players = await res.json();
+      const list = document.getElementById('playerList');
+      list.innerHTML = '';
+      players.forEach(player => {
+        const li = document.createElement('li');
+        li.textContent = `${player.name} - ${player.position} - ${player.team}`;
+        list.appendChild(li);
+      });
+    }
+
+    document.getElementById('playerForm').addEventListener('submit', async e => {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const position = document.getElementById('position').value.trim();
+      const team = document.getElementById('team').value.trim();
+
+      if (!name || !position || !team) {
+        alert('모든 필드를 입력하세요!');
+        return;
+      }
+
+      const res = await fetch('/players', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, position, team }),
+      });
+
+      if (res.ok) {
+        document.getElementById('playerForm').reset();
+        fetchPlayers();
+      } else {
+        alert('선수 등록 실패!');
+      }
+    });
+
+    // 페이지 로드 시 선수 목록 가져오기
+    fetchPlayers();
+  </script>
+</body>
+</html>
