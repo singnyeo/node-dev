@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>Baseball Player 관리</title>
+  <title>야구선수 관리</title>
   <style>
     body { font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; }
     h1 { text-align: center; }
@@ -60,8 +60,12 @@
         deleteBtn.onclick = async () => {
           if (confirm(`${player.name} 선수를 삭제하시겠습니까?`)) {
             const res = await fetch(`/players/${player.id}`, { method: 'DELETE' });
-            if (res.ok) fetchPlayers();
-            else alert('삭제 실패!');
+            if (res.ok) {
+              alert('삭제 완료!');
+              fetchPlayers();
+            } else {
+              alert('삭제 실패!');
+            }
           }
         };
 
@@ -91,6 +95,7 @@
           body: JSON.stringify({ name, position, team }),
         });
         if (res.ok) {
+          alert('수정 완료!');
           editId = null;
           document.querySelector('#playerForm button').textContent = '선수 등록';
           document.getElementById('playerForm').reset();
@@ -106,10 +111,11 @@
           body: JSON.stringify({ name, position, team }),
         });
         if (res.ok) {
+          alert('등록 완료!')
           document.getElementById('playerForm').reset();
           fetchPlayers();
         } else {
-          alert('선수 등록 실패!');
+          alert('등록 실패!');
         }
       }
     });
